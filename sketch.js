@@ -5,7 +5,7 @@ var Game = function(familyNames){
 	//a balanced world
 	var squareWidth = 20;
 	this.boardSize = displayWidth/squareWidth * displayHeight/squareWidth;
-	this.activeSquares = [];
+	this.board = 
 	this.families = [];
 	strokeWeight(0.2);
 	stroke(100,150,75);
@@ -43,12 +43,14 @@ var Game = function(familyNames){
 	this.map = {};
 	//what if we iterate over the entire map one resource at a time? sure, why not
 	for (resource in this.world){
-		for(i=0;i<displayWidth;i+=squareWidth){
-			for (j=0;j<displayHeight;j+=squareWidth){
-				
-			}
-		}
+		r = random();
+		r *= 
 	}
+		// for(i=0;i<displayWidth;i+=squareWidth){
+		// 	for (j=0;j<displayHeight;j+=squareWidth){
+				
+		// 	}
+		// }
 };
 
 var Actor = function(age, lifespan, links){
