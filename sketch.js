@@ -5,7 +5,7 @@ var Game = function(familyNames){
 	//a balanced world
 	var squareWidth = 20;
 	this.boardSize = displayWidth/squareWidth * displayHeight/squareWidth;
-	this.board = 
+	this.board = new Array(this.boardSize);
 	this.families = [];
 	strokeWeight(0.2);
 	stroke(100,150,75);
@@ -25,32 +25,56 @@ var Game = function(familyNames){
 	}
 	//then setup resources the resources - 
 	//fresh water, salt water, arable land, forest, mountain, desert, ice
-	//let's use real percentages to set up the game
+	//let's use real ages to set up the game
 	//and climate change to change the game
 	//create the grid first
 	strokeWeight(0.2);
 	stroke(100,150,75);
-	this.world={
-		freshWater: 5,
-		saltWater: 70,
-		mountains: 5,
-		arableLand: 5,
-		forest: 5,
-		desert: 5,
-		ice: 5
+	this.world = {
+		freshWater: {
+			p: 0.02,
+			c: color(138, 207, 237),
+			n: "Fresh Water"
+		},
+		saltWater: {
+			p: 0.70,
+			c: color(15, 111, 171),
+			n: "Salt Water"
+		},
+		cropLand: {
+			p: 0.03,
+			c: color(133, 105, 45),
+			n: "Crop Land"
+		},
+		pasture: {
+			p: 0.07,
+			c: color(45, 133, 51),
+			n: "Pasture"
+		},
+		forest: {
+			p: 0.07,
+			c: color(12, 99, 18),
+			n: "Forest"
+		},
+		desert: {
+			p: 0.07,
+			c: color(219, 215, 77),
+			n: "Desert"
+		},
+		mountain: {
+			p: 0.07,
+			c: color(99, 99, 99),
+			n: "Mountain"
+		}
 	};
-	//create a map wiht resources and families
-	this.map = {};
-	//what if we iterate over the entire map one resource at a time? sure, why not
-	for (resource in this.world){
-		r = random();
-		r *= 
+	//populate the world with resouces
+	for (var resource in this.world){
+		if (this.world.hasOwnProperty(resource)){
+			n = Math.floor(this.world[resource].p * this.boardSize);
+			for 
+		}
 	}
-		// for(i=0;i<displayWidth;i+=squareWidth){
-		// 	for (j=0;j<displayHeight;j+=squareWidth){
-				
-		// 	}
-		// }
+
 };
 
 var Actor = function(age, lifespan, links){
