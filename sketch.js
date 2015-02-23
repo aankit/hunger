@@ -3,8 +3,8 @@ var Game = function(){
 	//how big is the game, this will be important to creating
 	//a balanced world
 	this.squareWidth = 25;
-	this.boardX = 49;
-	this.boardY = 22;
+	this.boardX = 50;
+	this.boardY = 25;
 	this.boardSize = this.boardX * this.boardY;
 	this.board = new Array(this.boardSize);
 	this.getXY = function(i){
@@ -76,23 +76,24 @@ var Game = function(){
 		}
 	}
 	this.board = shuffle(this.board);
-	for (var i=0;i<this.board.length;i++){
-		try {
-			colortoUse = this.board[i].c;
+	this.display = function(){
+		for (var i=0;i<this.board.length;i++){
+			try {
+				colortoUse = this.board[i].c;
+			}
+			catch (err){
+				this.board[i]=this.world.cropLand;
+			}
+			var p = this.getXY(i);
+			fill(this.board[i].c);
+			rect(p.xpos,p.ypos,this.squareWidth, this.squareWidth);
 		}
-		catch (err){
-			this.board[i]=this.world.cropLand;
-		}
-		var p = this.getXY(i);
-		fill(this.board[i].c);
-		rect(p.xpos,p.ypos,this.squareWidth, this.squareWidth);
-	}
+	};
 	var hpos = this.getXY(placeHuman(this.board));
 	this.actors["Patel"] = new Human("Aankit", hpos);
 };
 
 function placeHuman(arr){
-	var p;
 	var keepLooking = true;
 	while(keepLooking){
 		var temp = Math.floor(random(0,arr.length));
@@ -117,18 +118,29 @@ var Actor = function(position){
 	this.position = position;
 	this.edges = [];
 	this.diameter = 10;
+	var a = 0;
 	this.getFill = function(){
-		var red = 0;
-		var green = 0;
-		var blue = 0;
+		var red = 192;
+		var green = 118;
+		var blue = 255;
 		//need to add more age levels to this...
 		//maybe each family has a base color and age goes from light to dark?
 		return color(red, green, blue);
 	};
 
 	this.display = function(){
+		if(this.edges.length===0) {
+			a += 0.1;
+		} else {
+			a = 0;
+		}
 		fill(this.getFill());
-		ellipse(this.position.xpos+game.squareWidth/2,this.position.ypos+game.squareWidth/2,this.diameter, this.diameter);
+		noStroke();
+		var x = this.position.xpos+game.squareWidth/2;
+		var y = this.position.ypos+game.squareWidth/2 - abs(sin(a)) * 10;
+		var d = this.diameter;
+		console.log(d);
+		ellipse(x,y, d, d);
 	};
 
 	this.addEdges = function(actor){
@@ -166,6 +178,7 @@ function setup() {
 }
 
 function draw() {
+	game.display();
 	for (var actor in game.actors){
 		game.actors[actor].display();
 	}
