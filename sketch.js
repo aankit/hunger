@@ -117,7 +117,7 @@ function shuffle(o){ //v1.0
 var Actor = function(position){
 	this.position = position;
 	this.edges = [];
-	this.diameter = 10;
+	this.diameter = 15;
 	var a = 0;
 	this.getFill = function(){
 		var red = 192;
