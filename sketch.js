@@ -1,34 +1,24 @@
 // var titleScreen();
-var Game = function(familyNames){
+var Game = function(){
 	//how big is the game, this will be important to creating
 	//a balanced world
-	var squareWidth = 20;
-	this.boardX = displayWidth/squareWidth;
-	this.boardY = displayHeight/squareWidth;
-	this.boardSize = this.boardX *  this.boardY;
+	this.squareWidth = 20;
+	this.boardX = 62;
+	this.boardY = 31;
+	this.boardSize = this.boardX * this.boardY;
 	this.board = new Array(this.boardSize);
-	this.families = [];
+	//stuff on the board
+	this.actors = [];
+	//draw the grid
 	strokeWeight(0.2);
 	stroke(100,150,75);
-	for(i=0;i<=displayWidth;i+=20){
+	for(i=0;i<=this.boardX;i+=this.squareWidth){
 		line(i, 0, i, displayHeight);
 	}
-	for (j=0;j<displayHeight;j+=20){
+	for (j=0;j<this.boardY;j+=this.squareWidth){
 		line(0, j, displayWidth, j);
 	}
-	//next places the families
-	for (i=0;i<familyNames.length;i++){
-		var familyHome = {
-			x: random(0,displayWidth),
-			y: random(0,displayHeight)
-		};
-		this.families.push(new Family(familyNames[i], familyHome));
-	}
-	//then setup resources the resources - 
-	//fresh water, salt water, arable land, forest, mountain, desert, ice
-	//let's use real ages to set up the game
-	//and climate change to change the game
-	//create the grid first
+	//create the game board
 	strokeWeight(0.2);
 	stroke(100,150,75);
 	this.world = {
@@ -36,12 +26,6 @@ var Game = function(familyNames){
 			p: 0.02,
 			c: color(138, 207, 237),
 			n: "Fresh Water",
-			s: 0
-		},
-		saltWater: {
-			p: 0.70,
-			c: color(15, 111, 171),
-			n: "Salt Water",
 			s: 0
 		},
 		cropLand: {
@@ -52,7 +36,7 @@ var Game = function(familyNames){
 		},
 		pasture: {
 			p: 0.07,
-			c: color(45, 133, 51),
+			c: color(155, 237, 147),
 			n: "Pasture",
 			s: 0
 		},
@@ -70,8 +54,14 @@ var Game = function(familyNames){
 		},
 		mountain: {
 			p: 0.06,
-			c: color(99, 99, 99),
+			c: color(75, 75, 75),
 			n: "Mountain",
+			s: 0
+		},
+		saltWater: {
+			p: 0.70,
+			c: color(15, 111, 171),
+			n: "Salt Water",
 			s: 0
 		}
 	};
@@ -87,9 +77,8 @@ var Game = function(familyNames){
 			}
 		}
 	}
-	// console.log(this.board.indexOf("Crop Land"))
 	this.board = shuffle(this.board);
-	for (var i in this.board){
+	for (var i=0;i<this.board.length;i++){
 		try {
 			colortoUse = this.board[i].c;
 		}
@@ -97,12 +86,17 @@ var Game = function(familyNames){
 			this.board[i]=this.world.cropLand;
 		}
 		fill(this.board[i].c);
-		var y = Math.floor(i/this.boardX)*squareWidth;
-		console.log(y);
-		rect((i%this.boardX)*squareWidth,y,squareWidth, squareWidth);
+		var y = Math.floor(i/this.boardX)*this.squareWidth;
+		var x = (i%this.boardX)*this.squareWidth
+		rect(x,y,this.squareWidth, this.squareWidth);
 	}
+
+
 };
 
+// function placeHuman(){
+// 	for (var i in this.board)
+// }
 
 
 function shuffle(o){ //v1.0
@@ -110,57 +104,39 @@ function shuffle(o){ //v1.0
     return o;
 }
 
-var Actor = function(age, lifespan, links){
-  //this.uid = uid;
-	this.age = age;
-	this.lifespan= lifespan;
-	this.links = links;
-	this.size = this.links*10;
+//Seeds, Humans, Oil
+//
+//First is the Actor Prototype (is that the right use of this word/concept?)
+var Actor = function(position){
+	this.position = position;
+	this.edges = [];
+	this.diameter = 10;
 	this.getFill = function(){
-		var red;
-		var green;
-		var blue;
+		var red = 0;
+		var green = 0;
+		var blue = 0;
 		//need to add more age levels to this...
 		//maybe each family has a base color and age goes from light to dark?
-		if(this.age < 18){
-			red = 255;
-			green = 0;
-			blue = 0;
-		} else {
-			red = 0;
-			green = 255;
-			blue = 0;
-		}
 		return color(red, green, blue);
 	};
+
 	this.display = function(){
-		this.fillColor = this.getFill(age);
+		this.fillColor = this.getFill();
 		fill(this.fillColor);
-		ellipse(this.x,this.y, this.size, this.size);
+		ellipse(
+			this.position.x*game.squareWidth-game.squareWidth/2,
+			this.position.y*game.squareWidth-game.squareWidth/2,
+			this.diameter, this.diameter);
+	};
+
+	this.addEdges = function(actor){
+		this.edges.push(actor);
 	};
 };
 
-var Human = function(firstName, gender, family){
+var Human = function(firstName, position){
 	this.firstName = firstName;
-	this.gender = gender;
-	this.links = [];
-	this.lifespan = function(){
-		if(this.gender === '0'){
-			lifespan = 82;
-		} else {
-			lifespan = 85;
-		}
-	};
-	this.addLinks = function(actor){
-		this.links.push(actor);
-		// line()
-	};
-	this.getLinks = function(){
-
-	};
-	//dietary needs
-	//taste wants
-	Actor.call(this, 0, this.lifespan, 10);
+	Actor.call(this, position);
 };
 
 var Family = function(surname, home){
@@ -171,22 +147,21 @@ var Family = function(surname, home){
 	this.members = [];
 	this.addMember = function(human){
 		this.members.push(human);
-		//determine board position
-		
-		//what are some other things that happen when we add
-		//a member to the family?
 	};
 
 };
 
+var h, game;
+
 function setup() {
-  createCanvas(window.innerWidth, window.innerHeight);
-  // titleScreen(); this will allow people to enter the game
-  var familyNames = ['Patel', 'Pratap'];
-  var game = new Game(familyNames);
-  //how do I want to make humans?
+	createCanvas(window.innerWidth, window.innerHeight);
+	// titleScreen(); this will allow people to enter the game
+	game = new Game();
+	p = {x: 3, y: 3}
+	h = new Human("Aankit", p);
+	//how do I want to make humans?
 }
 
 function draw() {
-  
+	h.display();
 }
