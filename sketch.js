@@ -2,22 +2,20 @@
 var Game = function(){
 	//how big is the game, this will be important to creating
 	//a balanced world
-	this.squareWidth = 20;
-	this.boardX = 62;
-	this.boardY = 31;
+	this.squareWidth = 25;
+	this.boardX = 49;
+	this.boardY = 22;
 	this.boardSize = this.boardX * this.boardY;
 	this.board = new Array(this.boardSize);
-	//stuff on the board
-	this.actors = [];
-	//draw the grid
-	strokeWeight(0.2);
-	stroke(100,150,75);
-	for(i=0;i<=this.boardX;i+=this.squareWidth){
-		line(i, 0, i, displayHeight);
-	}
-	for (j=0;j<this.boardY;j+=this.squareWidth){
-		line(0, j, displayWidth, j);
-	}
+	this.getXY = function(i){
+		var p = {
+			ypos: Math.floor(i/this.boardX)*this.squareWidth,
+			xpos: (i%this.boardX)*this.squareWidth
+		};
+		return p;
+	};
+	//keep track of the board
+	this.actors = {};
 	//create the game board
 	strokeWeight(0.2);
 	stroke(100,150,75);
@@ -85,18 +83,26 @@ var Game = function(){
 		catch (err){
 			this.board[i]=this.world.cropLand;
 		}
+		var p = this.getXY(i);
 		fill(this.board[i].c);
-		var y = Math.floor(i/this.boardX)*this.squareWidth;
-		var x = (i%this.boardX)*this.squareWidth
-		rect(x,y,this.squareWidth, this.squareWidth);
+		rect(p.xpos,p.ypos,this.squareWidth, this.squareWidth);
 	}
-
-
+	var hpos = this.getXY(placeHuman(this.board));
+	this.actors["Patel"] = new Human("Aankit", hpos);
 };
 
-// function placeHuman(){
-// 	for (var i in this.board)
-// }
+function placeHuman(arr){
+	var p;
+	var keepLooking = true;
+	while(keepLooking){
+		var temp = Math.floor(random(0,arr.length));
+		var index = ["Mountain", "Pasture", "Desert", "Crop Land", "Forest"].indexOf(arr[temp].n);
+		if (index>-1){
+			keepLooking = false;
+			return temp;
+		}
+	}
+}
 
 
 function shuffle(o){ //v1.0
@@ -121,12 +127,8 @@ var Actor = function(position){
 	};
 
 	this.display = function(){
-		this.fillColor = this.getFill();
-		fill(this.fillColor);
-		ellipse(
-			this.position.x*game.squareWidth-game.squareWidth/2,
-			this.position.y*game.squareWidth-game.squareWidth/2,
-			this.diameter, this.diameter);
+		fill(this.getFill());
+		ellipse(this.position.xpos+game.squareWidth/2,this.position.ypos+game.squareWidth/2,this.diameter, this.diameter);
 	};
 
 	this.addEdges = function(actor){
@@ -157,11 +159,15 @@ function setup() {
 	createCanvas(window.innerWidth, window.innerHeight);
 	// titleScreen(); this will allow people to enter the game
 	game = new Game();
-	p = {x: 3, y: 3}
-	h = new Human("Aankit", p);
 	//how do I want to make humans?
+	for (var actor in game.actors){
+		console.log(game.actors[actor]);
+	}
 }
 
 function draw() {
-	h.display();
+	for (var actor in game.actors){
+		game.actors[actor].display();
+	}
+
 }
