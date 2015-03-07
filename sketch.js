@@ -7,10 +7,6 @@ var Game = function(){
 	this.boardY = 23;
 	this.boardSize = this.boardX * this.boardY;
 	this.board = new Array(this.boardSize);
-	//lets set up the actor rules
-	this.humanConstraints = ["Mountain", "Pasture", "Desert", "Crop Land", "Forest"];
-	this.oilConstraints = ["Salt Water"];
-	this.seedConstraints = ["Forest, Pasture, Crop Land, Mountain"];
 	//helper functions
 	this.getXY = function(i){
 		var p = {
@@ -19,36 +15,9 @@ var Game = function(){
 		};
 		return p;
 	};
-
-	this.placeActor = function(actorType){
-		var keepLooking = true;
-		switch(actorType){
-			case 'human':
-				constraints = humanConstraints;
-				break;
-			case 'oil':
-				constraints = oilConstraints;
-				break;
-			case 'seed':
-				constraints = seedConstraints;
-				break;
-		}
-		while(keepLooking){
-			var temp = Math.floor(random(0,this.board.length));
-			var index = constraints.
-				indexOf(availableBoard[temp].resourceType.n);
-			if (index>-1){
-				if(!this.board[temp].occupied){
-					this.board[temp].occupied = actorType;
-					keepLooking = false;
-				} else {
-					
-				}
-			}
-		}
-	};
 	//keep track of the board
 	this.actors = {};
+
 	//create the game board
 	strokeWeight(0.2);
 	stroke(100,150,75);
@@ -129,33 +98,44 @@ var Game = function(){
 			rect(p.xpos,p.ypos,this.squareWidth, this.squareWidth);
 		}
 	};
-	var hpos = this.getXY(placeActor(this.board, humanConstraints));
-	this.actors["Patel"] = new Human("Aankit", hpos);
+	this.actors["Patel"] = new Human(this, "Aankit");
 };
 
+//Helper functions
 
 function shuffle(o){ //v1.0
     for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
     return o;
 }
 
-//Seeds, Humans, Oil
+this.placeActor = function(game, constraints){
+	var keepLooking = true;
+	while(keepLooking){
+		var temp = Math.floor(random(0,game.board.length));
+		var index = constraints.
+			indexOf(game.board[temp].resourceType.n);
+		if (index>-1){
+			if(game.board[temp].occupied===''){
+				game.board[temp].occupied = actorType;
+				keepLooking = false;
+			} else {
+
+			}
+		}
+	}
+};
+
+//Seeds, Humans, Oil, Animals, Fish
+//
+//
+//
 //
 //First is the Actor Prototype (is that the right use of this word/concept?)
-var Actor = function(position){
+var Actor = function(game, constraints, fillColor){
 	this.position = position;
 	this.edges = [];
 	this.diameter = 15;
 	var a = 0;
-	this.getFill = function(){
-		var red = 192;
-		var green = 118;
-		var blue = 100;
-		//need to add more age levels to this...
-		//maybe each family has a base color and age goes from light to dark?
-		return color(red, green, blue);
-	};
-
 	this.display = function(){
 		if(this.edges.length===0) {
 			a += 0.1;
@@ -168,8 +148,7 @@ var Actor = function(position){
 		var x = this.position.xpos+game.squareWidth/2;
 		var y = this.position.ypos+game.squareWidth/2 - abs(sin(a)) * 10;
 		var d = this.diameter;
-		console.log(d);
-		ellipse(x,y, d, d);
+		ellipse(x, y, d, d);
 	};
 
 	this.addEdges = function(actor){
@@ -177,9 +156,39 @@ var Actor = function(position){
 	};
 };
 
-var Human = function(firstName, position){
+var Human = function(game, firstName){
 	this.firstName = firstName;
-	Actor.call(this, position);
+	var constraints = ["Mountain", "Pasture", "Desert", "Crop Land", "Forest"];
+	var color = color(192,118,100);
+	Actor.call(this, game, constraints, color);
+};
+
+var Oil = function(game, wellName){
+	this.wellName = wellName;
+	var constraints = ["Salt Water"];
+	var color = color(0,0,0);
+	Actor.call(this, game, constraints, color);
+};
+
+var Seed = function(game, seedName){
+	this.seedName = seedName;
+	var constraints = ["Forest", "Pasture", "Crop Land", "Mountain"];
+	var color = color(218,165,32);
+	Actor.call(this, game, constraints, color);
+};
+
+var Animal = function(game, animalName){
+	this.animalName = animalName;
+	var constraints = ["Forest", "Pasture", "Crop Land", "Mountain"];
+	var color = color(218,165,32);
+	Actor.call(this, game, constraints, color);
+};
+
+var Fish = function(game, fishName){
+	this.fishName = fishName;
+	var constraints = ["Fresh Water", "Salt Water"];
+	var color = color(192,192,192);
+	Actor.call(this, game, constraints, color);
 };
 
 var Family = function(surname, home){
