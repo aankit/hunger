@@ -4,15 +4,48 @@ var Game = function(){
 	//a balanced world
 	this.squareWidth = 25;
 	this.boardX = 50;
-	this.boardY = 25;
+	this.boardY = 23;
 	this.boardSize = this.boardX * this.boardY;
 	this.board = new Array(this.boardSize);
+	//lets set up the actor rules
+	this.humanConstraints = ["Mountain", "Pasture", "Desert", "Crop Land", "Forest"];
+	this.oilConstraints = ["Salt Water"];
+	this.seedConstraints = ["Forest, Pasture, Crop Land, Mountain"];
+	//helper functions
 	this.getXY = function(i){
 		var p = {
 			ypos: Math.floor(i/this.boardX)*this.squareWidth,
 			xpos: (i%this.boardX)*this.squareWidth
 		};
 		return p;
+	};
+
+	this.placeActor = function(actorType){
+		var keepLooking = true;
+		switch(actorType){
+			case 'human':
+				constraints = humanConstraints;
+				break;
+			case 'oil':
+				constraints = oilConstraints;
+				break;
+			case 'seed':
+				constraints = seedConstraints;
+				break;
+		}
+		while(keepLooking){
+			var temp = Math.floor(random(0,this.board.length));
+			var index = constraints.
+				indexOf(availableBoard[temp].resourceType.n);
+			if (index>-1){
+				if(!this.board[temp].occupied){
+					this.board[temp].occupied = actorType;
+					keepLooking = false;
+				} else {
+					
+				}
+			}
+		}
 	};
 	//keep track of the board
 	this.actors = {};
@@ -70,7 +103,10 @@ var Game = function(){
 			n = Math.floor(this.world[resource].p * this.boardSize);
 			startingSquare = lastSquare;
 			for(i=startingSquare;i<(startingSquare+n);i++){
-				this.board[i]=this.world[resource];
+				this.board[i]={
+					'resourceType': this.world[resource],
+					'occupied': ''
+				};
 				lastSquare ++;
 			}
 		}
@@ -79,31 +115,23 @@ var Game = function(){
 	this.display = function(){
 		for (var i=0;i<this.board.length;i++){
 			try {
-				colortoUse = this.board[i].c;
+				colortoUse = this.board[i].resourceType.c;
 			}
 			catch (err){
-				this.board[i]=this.world.cropLand;
+				this.board[i]={
+					'resourceType': this.world.cropLand,
+					'occupied': false
+				};
+				colortoUse = this.board[i].resourceType.c;
 			}
 			var p = this.getXY(i);
-			fill(this.board[i].c);
+			fill(colortoUse);
 			rect(p.xpos,p.ypos,this.squareWidth, this.squareWidth);
 		}
 	};
-	var hpos = this.getXY(placeHuman(this.board));
+	var hpos = this.getXY(placeActor(this.board, humanConstraints));
 	this.actors["Patel"] = new Human("Aankit", hpos);
 };
-
-function placeHuman(arr){
-	var keepLooking = true;
-	while(keepLooking){
-		var temp = Math.floor(random(0,arr.length));
-		var index = ["Mountain", "Pasture", "Desert", "Crop Land", "Forest"].indexOf(arr[temp].n);
-		if (index>-1){
-			keepLooking = false;
-			return temp;
-		}
-	}
-}
 
 
 function shuffle(o){ //v1.0
@@ -122,7 +150,7 @@ var Actor = function(position){
 	this.getFill = function(){
 		var red = 192;
 		var green = 118;
-		var blue = 255;
+		var blue = 100;
 		//need to add more age levels to this...
 		//maybe each family has a base color and age goes from light to dark?
 		return color(red, green, blue);
@@ -135,7 +163,8 @@ var Actor = function(position){
 			a = 0;
 		}
 		fill(this.getFill());
-		noStroke();
+		strokeWeight(2);
+		stroke(0);
 		var x = this.position.xpos+game.squareWidth/2;
 		var y = this.position.ypos+game.squareWidth/2 - abs(sin(a)) * 10;
 		var d = this.diameter;
