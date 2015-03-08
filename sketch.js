@@ -1,4 +1,6 @@
-// var titleScreen();
+// var TitleScreen = function(){
+
+// };
 
 var Game = function(){
 	//this is our setup condensed
@@ -8,8 +10,6 @@ var Game = function(){
 		this.boardY = 23;
 		this.boardSize = this.boardX * this.boardY;
 		this.board = new Array(this.boardSize);
-		//keep track of the board
-		this.actors = {};
 
 		//create the game board
 		strokeWeight(0.2);
@@ -73,17 +73,19 @@ var Game = function(){
 				}
 			}
 		}
-		this.board = shuffle(this.board);
-
 		//oh bad code! I say, bad code chap.
-		for (var i=0;i<this.board.length-1;i++){
+		for (var i=0;i<this.board.length;i++){
 			if(this.board[i]===undefined){
+					console.log('here');
 					this.board[i]={
 					'resourceType': this.world.cropLand,
 					'occupied': false
 				};
 			}
 		}
+		//shuffle the squares
+		this.board = shuffle(this.board);
+		//initiate the living things!
 	};
 	
 	//helper functions
@@ -94,6 +96,7 @@ var Game = function(){
 		};
 		return p;
 	};
+
 	this.display = function(){
 		for (var i=0;i<this.board.length;i++){
 			var fillColor = this.board[i].resourceType.c;
@@ -102,7 +105,7 @@ var Game = function(){
 			rect(p.xpos,p.ypos,this.squareWidth, this.squareWidth);
 		}
 	};
-	
+
 };
 
 //Helper functions
@@ -142,13 +145,13 @@ var Actor = function(game, constraints, fillColor){
 	this.edges = [];
 	this.diameter = 15;
 	var a = 0;
-	this.display = function(){
+	this.show = function(){
 		if(this.edges.length===0) {
 			a += 0.1;
 		} else {
 			a = 0;
 		}
-		fill(this.getFill());
+		fill(fillColor);
 		strokeWeight(2);
 		stroke(0);
 		var x = this.position.xpos+game.squareWidth/2;
@@ -216,23 +219,44 @@ var Family = function(surname, home){
 //																			//
 //////////////////////////////////////////////////////////////////////////////
 
-var h, game;
+var game;
+
+var actors = {};
+var player = "Toumai";
+var well = "Drake";
+var seed = "Wheat";
+var animal = "Bird";
+var fish = "Fish";
+
 
 function setup() {
 	createCanvas(window.innerWidth, window.innerHeight);
 	// titleScreen(); this will allow people to enter the game
 	game = new Game();
 	game.createGame();
-	//how do I want to make humans?
-	// for (var actor in game.actors){
-	// 	console.log(game.actors[actor]);
-	// }
+	//how do I want to make humans, animals, fish, seeds, and oil.
+	actors.player = new Human(game, player);
+	actors.seed = new Seed(game, seed);
+	actors.well = new Oil(game, well);
+	actors.animal = new Animal(game, animal);
+	actors.fish = new Fish(game, fish);
 }
 
 function draw() {
 	game.display();
-	for (var actor in game.actors){
-		game.actors[actor].display();
+	for (var actor in actors){
+		actors[actor].show();
 	}
 
 }
+
+
+
+
+
+
+
+	// //keep track of the board
+	// this.actors = {};
+	// this.actors["Patel"] = new Human(this, "Aankit");
+

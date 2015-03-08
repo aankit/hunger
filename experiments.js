@@ -12,6 +12,8 @@ function setup() {
   // code when you load the sketch in your browser.
   canvas.position(300, 50);
   canvas.class("lemon");
+  player = createInput("Name:");
+  player.position(300, 50);
 }
 
 function draw() {
@@ -19,4 +21,5 @@ function draw() {
   background(220, 180, 200);
   ellipse(width/2, height/2, 100, 100);
   ellipse(width/4, height/2, 50, 50);
+  console.log(player.value());
 }
