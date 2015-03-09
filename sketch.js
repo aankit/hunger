@@ -145,7 +145,7 @@ var Actor = function(game, constraints, fillColor){
 	this.edges = [];
 	this.diameter = 15;
 	var a = 0;
-	this.show = function(){
+	this.display = function(){
 		if(this.edges.length===0) {
 			a += 0.1;
 		} else {
@@ -165,9 +165,12 @@ var Actor = function(game, constraints, fillColor){
 	};
 };
 
-var Human = function(game, firstName){
+var Human = function(game, firstName, originXY){
 	this.firstName = firstName;
-	var constraints = ["Mountain", "Pasture", "Desert", "Crop Land", "Forest"];
+	var distanceXY =  
+	var constraints = {
+		resources: ["Mountain", "Pasture", "Desert", "Crop Land", "Forest"],
+		distance: ()
 	var fillColor = color(192,118,100);
 	Actor.call(this, game, constraints, fillColor);
 };
@@ -236,6 +239,7 @@ function setup() {
 	game.createGame();
 	//how do I want to make humans, animals, fish, seeds, and oil.
 	actors.player = new Human(game, player);
+	
 	actors.seed = new Seed(game, seed);
 	actors.well = new Oil(game, well);
 	actors.animal = new Animal(game, animal);
@@ -245,7 +249,7 @@ function setup() {
 function draw() {
 	game.display();
 	for (var actor in actors){
-		actors[actor].show();
+		actors[actor].display();
 	}
 
 }
