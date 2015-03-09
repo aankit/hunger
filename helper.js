@@ -6,17 +6,22 @@ function shuffle(o){ //v1.0
     return o;
 }
 
-function placeActor(game, constraints, xy){
-	var pos = getPos(xy);
+function placeActor(game, originXY, constraints){
 	var keepLooking = true;
 	var position = 0;
+	var bounds = getBounds(game, originXY);
 	while(keepLooking){
-		var temp = Math.floor(random(0,game.board.length));
-		console.log(constraints);
-		var tempIndex = constraints.indexOf(game.board[temp].resourceType.n);
+		var temp = {
+			xpos : Math.floor(random(bounds.xMin,bounds.xMax)),
+			ypos : Math.floor(random(bounds.yMin,bounds.yMax))
+		};
+		var arrTemp = game.getArr(temp);
+		console.log(arrTemp);
+		var tempIndex = constraints.indexOf(game.board[arrTemp].resourceType.n);
 		if (tempIndex>-1){
-			if(game.board[temp].occupied===false){
-				game.board[temp].occupied = true;
+			console.log(temp);
+			if(game.board[arrTemp].occupied===false){
+				game.board[arrTemp].occupied = true;
 				position = temp;
 				keepLooking = false;
 			} else {
@@ -24,12 +29,19 @@ function placeActor(game, constraints, xy){
 			}
 		}
 	}
-	return game.getXY(position);
+	return position;
 }
 
 function getBounds(game, origin){
-	var xDeltaMax = ((game.boardX - origin.xpos) < 10 ? game.boardX : (origin.xpos + 10));
-	var xDeltaMin = ((origin.xpos - 0) < 10 ? 0 : (origin.xpos - 10));
-	var yDeltaMax = ((game.boardY - origin.ypos) < 10 ? origin.ypos : (origin.ypos + 10));
-	var yDeltaMin = ((origin.ypos - 0) < 10 ? 0 : (origin.ypos - 10));
+	var xMax = ((game.boardX - origin.xpos) < 10 ? game.boardX : (origin.xpos + 10));
+	var xMin = ((origin.xpos - 0) < 10 ? 0 : (origin.xpos - 10));
+	var yMax = ((game.boardY - origin.ypos) < 10 ? origin.ypos : (origin.ypos + 10));
+	var yMin = ((origin.ypos - 0) < 10 ? 0 : (origin.ypos - 10));
+	var bounds = {
+		'xMax' : xMax,
+		'xMin' : xMin,
+		'yMax' : yMax,
+		'yMin' : yMin
+	};
+	return bounds;
 }

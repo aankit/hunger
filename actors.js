@@ -5,8 +5,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //First is the Actor Prototype (is that the right use of this word/concept?)
 var Actor = function(game, originXY, constraints, fillColor){
-	var bounds = getBounds(originXY);
-	this.position = placeActor(game, constraints, bounds);
+	this.position = placeActor(game, originXY, constraints);
 	this.edges = [];
 	this.diameter = 15;
 	var a = 0;
@@ -19,8 +18,8 @@ var Actor = function(game, originXY, constraints, fillColor){
 		fill(fillColor);
 		strokeWeight(2);
 		stroke(0);
-		var x = this.position.xpos+game.squareWidth/2;
-		var y = this.position.ypos+game.squareWidth/2 - abs(sin(a)) * 10;
+		var x = this.position.xpos*game.squareWidth+game.squareWidth/2;
+		var y = this.position.ypos*game.squareWidth+game.squareWidth/2 - abs(sin(a)) * 10;
 		var d = this.diameter;
 		ellipse(x, y, d, d);
 	};

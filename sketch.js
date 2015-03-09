@@ -25,15 +25,16 @@ function setup() {
 	game.createGame();
 	//how do I want to make humans, animals, fish, seeds, and oil.
 	var origin = {
-		xpos : Math.random(0, game.boardX),
-		ypos: Math.random(0, game.boardY)
+		xpos : Math.floor(random(0, game.boardX)),
+		ypos: Math.floor(random(0, game.boardY))
 	};
+	console.log(origin);
 	actors.player = new Human(game, player, origin);
 	
 	actors.seed = new Seed(game, seed, actors.player.position);
 	// actors.well = new Oil(game, well);
-	// actors.animal = new Animal(game, animal);
-	// actors.fish = new Fish(game, fish);
+	actors.animal = new Animal(game, animal, actors.player.position);
+	actors.fish = new Fish(game, fish, actors.player.position);
 }
 
 function draw() {

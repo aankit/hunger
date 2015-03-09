@@ -94,8 +94,8 @@ var Game = function(){
 		return p;
 	};
 
-	this.getPos = function(xy){
-		var p = x/squareWidth + y/squareWidth*this.boardX;
+	this.getArr = function(xy){
+		var p = xy.xpos + xy.ypos*this.boardX;
 		return p;
 	};
 
