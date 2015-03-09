@@ -30,7 +30,7 @@ function setup() {
 	};
 	actors.player = new Human(game, player, origin);
 	
-	// actors.seed = new Seed(game, seed);
+	actors.seed = new Seed(game, seed, actors.player.position);
 	// actors.well = new Oil(game, well);
 	// actors.animal = new Animal(game, animal);
 	// actors.fish = new Fish(game, fish);
@@ -38,9 +38,9 @@ function setup() {
 
 function draw() {
 	game.display();
-	// for (var actor in actors){
-	// 	actors[actor].display();
-	// }
+	for (var actor in actors){
+		actors[actor].display();
+	}
 
 }
 

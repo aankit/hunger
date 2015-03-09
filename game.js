@@ -86,11 +86,16 @@ var Game = function(){
 	};
 	
 	//helper functions
-	this.getXY = function(i){
+	this.getXY = function(pos){
 		var p = {
-			ypos: Math.floor(i/this.boardX)*this.squareWidth,
-			xpos: (i%this.boardX)*this.squareWidth
+			xpos: (pos%this.boardX)*this.squareWidth,
+			ypos: Math.floor(pos/this.boardX)*this.squareWidth
 		};
+		return p;
+	};
+
+	this.getPos = function(xy){
+		var p = x/squareWidth + y/squareWidth*this.boardX;
 		return p;
 	};
 

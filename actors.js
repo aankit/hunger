@@ -5,7 +5,8 @@
 //////////////////////////////////////////////////////////////////////////////
 //First is the Actor Prototype (is that the right use of this word/concept?)
 var Actor = function(game, originXY, constraints, fillColor){
-	this.position = placeActor(game, constraints);
+	var bounds = getBounds(originXY);
+	this.position = placeActor(game, constraints, bounds);
 	this.edges = [];
 	this.diameter = 15;
 	var a = 0;
@@ -36,28 +37,28 @@ var Human = function(game, firstName, originXY){
 	Actor.call(this, game, originXY, constraints, fillColor);
 };
 
-var Oil = function(game, wellName){
+var Oil = function(game, wellName, originXY){
 	this.wellName = wellName;
 	var constraints = ["Salt Water"];
 	var fillColor = color(0,0,0);
 	Actor.call(this, game, originXY, constraints, fillColor);
 };
 
-var Seed = function(game, seedName){
+var Seed = function(game, seedName, originXY){
 	this.seedName = seedName;
 	var constraints = ["Forest", "Pasture", "Crop Land", "Mountain"];
 	var fillColor = color(218,165,32);
 	Actor.call(this, game, originXY, constraints, fillColor);
 };
 
-var Animal = function(game, animalName){
+var Animal = function(game, animalName, originXY){
 	this.animalName = animalName;
 	var constraints = ["Forest", "Pasture", "Crop Land", "Mountain"];
 	var fillColor = color(218,165,32);
 	Actor.call(this, game, originXY, constraints, fillColor);
 };
 
-var Fish = function(game, fishName){
+var Fish = function(game, fishName, originXY){
 	this.fishName = fishName;
 	var constraints = ["Fresh Water", "Salt Water"];
 	var fillColor = color(192,192,192);

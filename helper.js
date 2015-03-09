@@ -6,7 +6,8 @@ function shuffle(o){ //v1.0
     return o;
 }
 
-function placeActor(game, constraints){
+function placeActor(game, constraints, xy){
+	var pos = getPos(xy);
 	var keepLooking = true;
 	var position = 0;
 	while(keepLooking){
