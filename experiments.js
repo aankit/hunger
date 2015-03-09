@@ -18,8 +18,14 @@ function setup() {
 
 function draw() {
   // These commands are applied to the graphics canvas as normal.
-  background(220, 180, 200);
-  ellipse(width/2, height/2, 100, 100);
-  ellipse(width/4, height/2, 50, 50);
-  console.log(player.value());
+  // background(220, 180, 200);
+  // ellipse(width/2, height/2, 100, 100);
+  // ellipse(width/4, height/2, 50, 50);
+  // console.log(player.value());
+}
+
+function mouseDragged() {
+  ellipse(mouseX, mouseY, 5, 5);
+  // prevent default
+  return false;
 }

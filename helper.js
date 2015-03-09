@@ -16,10 +16,10 @@ function placeActor(game, originXY, constraints){
 			ypos : Math.floor(random(bounds.yMin,bounds.yMax))
 		};
 		var arrTemp = game.getArr(temp);
-		console.log(arrTemp);
+		// console.log(arrTemp);
 		var tempIndex = constraints.indexOf(game.board[arrTemp].resourceType.n);
 		if (tempIndex>-1){
-			console.log(temp);
+			// console.log(temp);
 			if(game.board[arrTemp].occupied===false){
 				game.board[arrTemp].occupied = true;
 				position = temp;
@@ -33,10 +33,11 @@ function placeActor(game, originXY, constraints){
 }
 
 function getBounds(game, origin){
-	var xMax = ((game.boardX - origin.xpos) < 10 ? game.boardX : (origin.xpos + 10));
-	var xMin = ((origin.xpos - 0) < 10 ? 0 : (origin.xpos - 10));
-	var yMax = ((game.boardY - origin.ypos) < 10 ? origin.ypos : (origin.ypos + 10));
-	var yMin = ((origin.ypos - 0) < 10 ? 0 : (origin.ypos - 10));
+	var r = 5;
+	var xMax = ((game.boardX - origin.xpos) < r ? game.boardX : (origin.xpos + r));
+	var xMin = ((origin.xpos - 0) < r ? 0 : (origin.xpos - r));
+	var yMax = ((game.boardY - origin.ypos) < r ? origin.ypos : (origin.ypos + r));
+	var yMin = ((origin.ypos - 0) < r ? 0 : (origin.ypos - r));
 	var bounds = {
 		'xMax' : xMax,
 		'xMin' : xMin,
