@@ -51,7 +51,7 @@ function draw() {
 	}
 	if(lines.length>0){
 		for (var i=0;i<lines.length;i++){
-			console.log(lines[i]);
+			// console.log(lines[i]);
 			ellipse(lines[i].originx, lines[i].originy, 1, 1);
 			ellipse(lines[i].destx, lines[i].desty, 1, 1);
 			line(lines[i].originx, lines[i].originy,lines[i].destx, lines[i].desty);
@@ -66,10 +66,6 @@ function mousePressed() {
 		link.desty = mouseY;
 		lines.push(link);
 		console.log(lines);
-		link.originx = 0;
-		link.originy = 0;
-		link.destx = 0;
-		link.desty = 0;
 		originSelected = false;
 	} else if(originSelected===false){
 		link.originx = mouseX;
