@@ -1,6 +1,6 @@
 # Hunger Game: Play the Food System to Stay Alive
 
-You are the first person on Earth and you need to feed yourself! But wait, more humans will soon spring forth from your loins and you'll need to feed them too! Your job is to connect the dots between the [five different resources][resources] to grow food and raise animals that will feed the humans. If you wait too long they will die, so don't waste any time and make sure to yields are high!
+You are the first person on Earth and you need to feed yourself! But wait, more humans will soon spring forth from your loins and you'll need to feed them too! Your job is to connect the dots between the five different resources, see below, to grow food and raise animals that will feed the humans. If you wait too long they will die, so don't waste any time and make sure to yields are high!
 
 The game board is a representation of the entire world: 
 
