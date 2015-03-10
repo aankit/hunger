@@ -14,7 +14,7 @@ The game board is a representation of the entire world:
 
 The number of each type of square is a rough percentage of its occurence on the Earth's surface.
 
-[resources]: There are five different types of resources that generatively appear during the course of the game.
+There are five different types of resources that generatively appear during the course of the game.
 
 - Humans
 - Seeds
