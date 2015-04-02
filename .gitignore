@@ -1,1 +1,7 @@
 /libraries
+/venv
+keys.py
+.DS_Store
+*.pyc
+.ipynb_checkpoints
+*.wav
